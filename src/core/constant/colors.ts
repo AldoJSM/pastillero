@@ -5,5 +5,5 @@ export const COLORS = {
     primary: 'rgb(16,19,55)',
     secondary: 'rgb(34,36,80)',
     tertiary: 'rgb(44,50,92)',
-    success: 'rgb(60,61,121)',
+    purple: 'rgb(60,61,121)',
     };
