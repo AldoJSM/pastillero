@@ -1,19 +1,46 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { button, COLORS, inputText, primaryButton } from '@core'
 
 export const RegisterScreen = () => {
-  const {top}=useSafeAreaInsets()
+  const {top, bottom}=useSafeAreaInsets()
   return (
-    <View style={[styles.container, {paddingTop: top}]}>
-      <Text style={styles.title}>Registrarse</Text>
+    <ScrollView 
+    style={styles.container}
+
+    contentContainerStyle={{ 
+      paddingTop: top, 
+      paddingBottom: bottom+20,
+      flexGrow: 1 
+    }}
+    >
+      <Text style={styles.title}>Registro</Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.texts}>Nombre de usuario</Text>
+        <Text style={styles.texts}>Nombre del paciente</Text>
         {inputText()}
+        <Text style={styles.texts}>Edad</Text>
+        {inputText()}
+        <Text style={styles.texts}>Genero</Text>
+        {inputText()}
+        <Text style={styles.texts}>Número de telefono</Text>
+        {inputText()}
+        <Text style={styles.texts}>Lugar de residencia</Text>
+        {inputText()}
+
       </View>
       <View style={styles.inputContainer}>
+        <Text style={styles.texts}>Nombre del cuidador</Text>
+        {inputText()}
+        <Text style={styles.texts}>Edad</Text>
+        {inputText()}
+        <Text style={styles.texts}>Relación con el paciente</Text>
+        {inputText()}
+        <Text style={styles.texts}>Numero de contacto</Text>
+        {inputText()}
         <Text style={styles.texts}>Correo electronico</Text>
+        {inputText()}
+        <Text style={styles.texts}>Lugar de recidencia</Text>
         {inputText()}
       </View>
       <View style={styles.inputContainer}>
@@ -24,7 +51,7 @@ export const RegisterScreen = () => {
       {primaryButton({text:'Registar datos', oneTouch:()=>{alert('Te registraste correctamente')}})}
       {button({text:'<-Volver', oneTouch:()=>{alert('Te devuelve al login')}})}
 
-    </View>
+    </ScrollView>
   )
 }
 
@@ -33,7 +60,7 @@ const styles = StyleSheet.create({
       flex:1,
       padding: 10,
       backgroundColor: COLORS.purple,
-      justifyContent: 'center',
+     /// justifyContent: 'center',
   },
   inputContainer:{
       backgroundColor: COLORS.tertiary,
