@@ -1,10 +1,47 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { button, COLORS, inputText, primaryButton } from '@core'
+import { button, COLORS, inputText, primaryButton, registrarUsuario, registrarPaciente } from '@core'
 
 export const RegisterScreen = () => {
   const {top, bottom}=useSafeAreaInsets()
+  // Estado para los campos del paciente
+const [paciente, setPaciente] = useState({
+  nombreDelPaciente: '',
+  edadDelPaciente: '',
+  generoDelPaciente: '',
+  NumeroTelPaciente: '',
+  lugarDeResidenciaDelPaciente: '',
+});
+
+// Estado para los campos del cuidador
+const [cuidador, setCuidador] = useState({
+  nombreDelCuidador: '',
+  edadDelCuidador: '',
+  relacionConElPaciente: '',
+  NumeroTelCuidador: '',
+  lugarDeResidenciaDelCuidador: '',
+  correoElectronico: '',
+  password: '',
+});
+
+const handleChangePaciente = (key: keyof typeof paciente, value: string) => {
+  setPaciente({ ...paciente, [key]: value });
+};
+
+const handleChangeCuidador = (key: keyof typeof cuidador, value: string) => {
+  setCuidador({ ...cuidador, [key]: value });
+};
+
+const handleRegister = async () => {
+  try {
+    await registrarPaciente(paciente);
+    await registrarUsuario(cuidador);
+    Alert.alert("Registro exitoso", "Los datos se han guardado correctamente.");
+  } catch (error) {
+    Alert.alert("Error");
+  }
+};
   return (
     <ScrollView 
     style={styles.container}
@@ -18,37 +55,37 @@ export const RegisterScreen = () => {
       <Text style={styles.title}>Registro</Text>
       <View style={styles.inputContainer}>
         <Text style={styles.texts}>Nombre del paciente</Text>
-        {inputText()}
+        {inputText({value:paciente.nombreDelPaciente, onChangeText:(text)=>handleChangePaciente('nombreDelPaciente', text)})}
         <Text style={styles.texts}>Edad</Text>
-        {inputText()}
+        {inputText({value:paciente.edadDelPaciente, onChangeText:(text)=>handleChangePaciente('edadDelPaciente', text)})}
         <Text style={styles.texts}>Genero</Text>
-        {inputText()}
+        {inputText({value:paciente.generoDelPaciente, onChangeText:(text)=>handleChangePaciente('generoDelPaciente', text)})}
         <Text style={styles.texts}>Número de telefono</Text>
-        {inputText()}
+        {inputText({value:paciente.NumeroTelPaciente, onChangeText:(text)=>handleChangePaciente('NumeroTelPaciente', text)})}
         <Text style={styles.texts}>Lugar de residencia</Text>
-        {inputText()}
+        {inputText({value:paciente.lugarDeResidenciaDelPaciente, onChangeText:(text)=>handleChangePaciente('lugarDeResidenciaDelPaciente', text)})}
 
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.texts}>Nombre del cuidador</Text>
-        {inputText()}
+        {inputText({value:cuidador.nombreDelCuidador, onChangeText:(text)=>handleChangeCuidador('nombreDelCuidador', text)})}
         <Text style={styles.texts}>Edad</Text>
-        {inputText()}
+        {inputText({value:cuidador.edadDelCuidador, onChangeText:(text)=>handleChangeCuidador('edadDelCuidador', text)})}
         <Text style={styles.texts}>Relación con el paciente</Text>
-        {inputText()}
+        {inputText({value:cuidador.relacionConElPaciente, onChangeText:(text)=>handleChangeCuidador('relacionConElPaciente', text)})}
         <Text style={styles.texts}>Numero de contacto</Text>
-        {inputText()}
+        {inputText({value:cuidador.NumeroTelCuidador, onChangeText:(text)=>handleChangeCuidador('NumeroTelCuidador', text)})}
         <Text style={styles.texts}>Correo electronico</Text>
-        {inputText()}
+        {inputText({value:cuidador.correoElectronico, onChangeText:(text)=>handleChangeCuidador('correoElectronico', text)})}
         <Text style={styles.texts}>Lugar de recidencia</Text>
-        {inputText()}
+        {inputText({value:cuidador.lugarDeResidenciaDelCuidador, onChangeText:(text)=>handleChangeCuidador('lugarDeResidenciaDelCuidador', text)})}
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.texts}>Contraseña</Text>
-        {inputText()}
+        {inputText({value:cuidador.password, onChangeText:(text)=>handleChangeCuidador('password', text)})}
       </View>
 
-      {primaryButton({text:'Registar datos', oneTouch:()=>{alert('Te registraste correctamente')}})}
+      {primaryButton({text:'Registar datos', oneTouch:handleRegister})}
       {button({text:'<-Volver', oneTouch:()=>{alert('Te devuelve al login')}})}
 
     </ScrollView>

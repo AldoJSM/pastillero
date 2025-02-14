@@ -3,13 +3,17 @@ import React from 'react'
 import { COLORS } from '@core'
 
 interface ButtonProps {
-    text: string,
-    oneTouch: () => void
+    value: string,
+    onChangeText: (text: string) => void;
 }
 
-export const inputText = () => {
+export const inputText = ({value,onChangeText}:ButtonProps) => {
   return (
-    <TextInput style={style.input} /> 
+    <TextInput 
+    style={style.input} 
+    value={value}
+    onChangeText={onChangeText}
+    /> 
   )
 }
 
