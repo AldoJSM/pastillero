@@ -14,7 +14,7 @@ export function NavigationApp() {
     //funcion de stack para la autenticacion login|register
     function AuthStack() {
         return(
-            <Stack.Navigator initialRouteName='register'>
+            <Stack.Navigator initialRouteName='login'>
                 <Stack.Screen 
                     name='login' 
                     component={LoginScreen}

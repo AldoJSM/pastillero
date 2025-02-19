@@ -1,23 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
+import React, {useState} from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { button, COLORS, inputText, primaryButton } from '@core'
+import { button, COLORS, inputText, loguearse, primaryButton } from '@core'
 
 export const LoginScreen = () => {
     const {top}=useSafeAreaInsets()
+    const [correo, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+      const user = await loguearse({ correo, password});
+      if (user.success) {
+        Alert.alert("Éxito al loguearse",);  
+      }else{
+        alert("Error");
+      }
+      
+    
+  };
+
+    
   return (
     <View style={[styles.container, {paddingTop: top}]}>
       <Text style={styles.title}>Iniciar sesión</Text>
       <View style={styles.inputContainer}>
         <Text style={styles.texts}>Correo</Text>
-        {inputText()}
+        {inputText({value:correo, onChangeText:setEmail})}
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.texts}>Contraseña</Text>
-        {inputText()}
+        {inputText({value:password, onChangeText:setPassword})}
       </View>
 
-      {primaryButton({text:'Iniciar sesión', oneTouch:()=>{alert('Te has logueado correctamente')}})}
+      {primaryButton({text:'Iniciar sesión', oneTouch:handleLogin})}
       {button({text:'Crear cuenta', oneTouch:()=>{alert('a que te lleve a la pantalla de registro')}})}
 
     </View>

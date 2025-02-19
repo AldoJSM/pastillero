@@ -10,7 +10,7 @@ const [paciente, setPaciente] = useState({
   nombreDelPaciente: '',
   edadDelPaciente: '',
   generoDelPaciente: '',
-  NumeroTelPaciente: '',
+  numeroTelPaciente: '',
   lugarDeResidenciaDelPaciente: '',
 });
 
@@ -19,7 +19,7 @@ const [cuidador, setCuidador] = useState({
   nombreDelCuidador: '',
   edadDelCuidador: '',
   relacionConElPaciente: '',
-  NumeroTelCuidador: '',
+  numeroTelCuidador: '',
   lugarDeResidenciaDelCuidador: '',
   correoElectronico: '',
   password: '',
@@ -34,6 +34,32 @@ const handleChangeCuidador = (key: keyof typeof cuidador, value: string) => {
 };
 
 const handleRegister = async () => {
+  for (const key in paciente) {
+    if (!paciente[key as keyof typeof paciente]) {
+      Alert.alert("Error", `El campo ${key} del paciente es obligatorio.`);
+      return;
+    }
+  }
+  for (const key in cuidador) {
+    if (!cuidador[key as keyof typeof cuidador]) {
+      Alert.alert("Error", `El campo ${key} del cuidador es obligatorio.`);
+      return;
+    }
+  }
+
+  //Validar formato de correo electrónico
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(cuidador.correoElectronico)) {
+    Alert.alert("Error", "Ingrese un correo válido.");
+    return;
+  }
+
+  //Validar que la contraseña tenga al menos 6 caracteres
+  if (cuidador.password.length < 6) {
+    Alert.alert("Error", "La contraseña debe tener al menos 6 caracteres.");
+    return;
+  }
+
   try {
     await registrarPaciente(paciente);
     await registrarUsuario(cuidador);
@@ -61,7 +87,7 @@ const handleRegister = async () => {
         <Text style={styles.texts}>Genero</Text>
         {inputText({value:paciente.generoDelPaciente, onChangeText:(text)=>handleChangePaciente('generoDelPaciente', text)})}
         <Text style={styles.texts}>Número de telefono</Text>
-        {inputText({value:paciente.NumeroTelPaciente, onChangeText:(text)=>handleChangePaciente('NumeroTelPaciente', text)})}
+        {inputText({value:paciente.numeroTelPaciente, onChangeText:(text)=>handleChangePaciente('numeroTelPaciente', text)})}
         <Text style={styles.texts}>Lugar de residencia</Text>
         {inputText({value:paciente.lugarDeResidenciaDelPaciente, onChangeText:(text)=>handleChangePaciente('lugarDeResidenciaDelPaciente', text)})}
 
@@ -74,13 +100,14 @@ const handleRegister = async () => {
         <Text style={styles.texts}>Relación con el paciente</Text>
         {inputText({value:cuidador.relacionConElPaciente, onChangeText:(text)=>handleChangeCuidador('relacionConElPaciente', text)})}
         <Text style={styles.texts}>Numero de contacto</Text>
-        {inputText({value:cuidador.NumeroTelCuidador, onChangeText:(text)=>handleChangeCuidador('NumeroTelCuidador', text)})}
-        <Text style={styles.texts}>Correo electronico</Text>
-        {inputText({value:cuidador.correoElectronico, onChangeText:(text)=>handleChangeCuidador('correoElectronico', text)})}
+        {inputText({value:cuidador.numeroTelCuidador, onChangeText:(text)=>handleChangeCuidador('numeroTelCuidador', text)})}
         <Text style={styles.texts}>Lugar de recidencia</Text>
         {inputText({value:cuidador.lugarDeResidenciaDelCuidador, onChangeText:(text)=>handleChangeCuidador('lugarDeResidenciaDelCuidador', text)})}
       </View>
+      
       <View style={styles.inputContainer}>
+      <Text style={styles.texts}>Correo electronico</Text>
+      {inputText({value:cuidador.correoElectronico, onChangeText:(text)=>handleChangeCuidador('correoElectronico', text)})}
         <Text style={styles.texts}>Contraseña</Text>
         {inputText({value:cuidador.password, onChangeText:(text)=>handleChangeCuidador('password', text)})}
       </View>
