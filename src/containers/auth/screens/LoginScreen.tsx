@@ -3,18 +3,20 @@ import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { button, COLORS, inputText, loguearse, primaryButton } from '@core'
 
-export const LoginScreen = () => {
+export const LoginScreen = ({navigation}:any) => {
   const { top } = useSafeAreaInsets()
   const [correo, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     if (correo == "" || password == "") {
-      Alert.alert("Falta llenar algun campo")
+      Alert.alert("Falta llenar algun campo");
+      return;
     }
     const user = await loguearse({ correo, password });
     if (user.success) {
-      Alert.alert("Exito.", "Éxito al loguearse");
+      await Alert.alert("Exito.", "Éxito al loguearse");
+      navigation.navigate('MainApp')
     } else {
       Alert.alert("Error", " " + user.error);
     }
@@ -34,7 +36,7 @@ export const LoginScreen = () => {
       </View>
 
       {primaryButton({ text: 'Iniciar sesión', oneTouch: handleLogin })}
-      {button({ text: 'Crear cuenta', oneTouch: () => { alert('a que te lleve a la pantalla de registro') } })}
+      {button({ text: 'Crear cuenta', oneTouch: () => navigation.navigate('register') })}
 
     </View>
   )

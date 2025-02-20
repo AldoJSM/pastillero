@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { button, COLORS, inputText, primaryButton, registrarUsuario, registrarPaciente } from '@core'
 
-export const RegisterScreen = () => {
+export const RegisterScreen = ({ navigation }:any) => {
   const { top, bottom } = useSafeAreaInsets()
   // Estado para los campos del paciente
   const [paciente, setPaciente] = useState({
@@ -111,7 +111,7 @@ export const RegisterScreen = () => {
       </View>
 
       {primaryButton({ text: 'Registrar datos', oneTouch: handleRegister })}
-      {button({ text: '<-Volver', oneTouch: () => { alert('Te devuelve al login') } })}
+      {button({ text: '<-Volver', oneTouch: () => navigation.navigate('login') })}
 
     </ScrollView>
   )
