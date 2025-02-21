@@ -1,4 +1,4 @@
-import { ref, push } from "firebase/database";
+import { ref, push, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { db, auth } from "./firebase";
 
@@ -40,14 +40,14 @@ export const registrarUsuario = async ({ nombreDelCuidador, edadDelCuidador, rel
     const userCredential = await createUserWithEmailAndPassword(auth, correoElectronico, password);
 
     const userId = userCredential.user.uid;
-    await push(ref(db, 'usuarios/'), {
-      userId,
+    await set(ref(db, `usuarios/${userId}`), {
       nombreDelCuidador,
       edadDelCuidador,
       relacionConElPaciente,
       numeroTelCuidador,
       lugarDeResidenciaDelCuidador,
-    })
+      userId,
+    });
   } catch (error) {
     console.error("Error al registrar usuario:", error);
   }

@@ -9,7 +9,7 @@ interface Login {
 export const loguearse = async ({ correo, password }: Login) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, correo, password);
-        return { success: true, user: userCredential.user }
+        return { success: true, user: userCredential.user.uid }
     } catch (error) {
         console.log("No logueado", error)
         return { success: false, error: error }

@@ -15,8 +15,8 @@ export const LoginScreen = ({navigation}:any) => {
     }
     const user = await loguearse({ correo, password });
     if (user.success) {
-      await Alert.alert("Exito.", "Éxito al loguearse");
-      navigation.navigate('MainApp')
+      await Alert.alert("Exito.", "Éxito al loguearse "+ user.user);
+      navigation.navigate('MainApp',{ userId: user.user })
     } else {
       Alert.alert("Error", " " + user.error);
     }
