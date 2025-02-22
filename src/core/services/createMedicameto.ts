@@ -2,32 +2,32 @@ import { ref, set, get  } from "firebase/database";
 import { db } from "./firebase";
 
 interface Medicamento {
-    idUser: string,
+    userId: string,
     nombre: string,
     ciclo: string,
     primera: string,
 }
 
-export const registrarMedicamento = async ({ idUser, nombre, ciclo, primera }: Medicamento) => {
+export const registrarMedicamento = async ({ userId, nombre, ciclo, primera }: Medicamento) => {
     try {
-        if (!idUser) {
+        if (!userId) {
             throw new Error("idUser es undefined");
         }
 
         // Verificar si el usuario existe antes de registrar el medicamento
-        const userRef = ref(db, `usuarios/${idUser}`);
+        const userRef = ref(db, `usuarios/${userId}`);
         const snapshot = await get(userRef);
 
         if (!snapshot.exists()) {
-            throw new Error(`El usuario con ID ${idUser} no existe en Firebase.`);
+            throw new Error(`El usuario con ID ${userId} no existe en Firebase.`);
         }
 
         // Registrar medicamento en la ruta correcta
-        const medRef = ref(db, `usuarios/${idUser}/medicamentos/${nombre}`);
+        const medRef = ref(db, `usuarios/${userId}/medicamentos/${nombre}`);
         await set(medRef, { ciclo, primera });
 
-        console.log(" Medicamento registrado con éxito en:", `usuarios/${idUser}/medicamentos/${nombre}`);
+        console.log(" Medicamento registrado con éxito en:", `usuarios/${userId}/medicamentos/${nombre}`);
     } catch (error) {
-        console.log("Error");
+        console.error("Error", error);
     }
 }
