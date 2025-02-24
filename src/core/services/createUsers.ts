@@ -1,4 +1,4 @@
-import { ref, push, set } from "firebase/database";
+import { ref, set } from "firebase/database";
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { db, auth } from "./firebase";
 
@@ -21,21 +21,7 @@ interface Usuario {
   password: string;
 };
 
-//funciones para usar
-export const registrarPaciente = ({ nombreDelPaciente, edadDelPaciente, generoDelPaciente, numeroTelPaciente, lugarDeResidenciaDelPaciente }: DatosDelPaciente) => {
-
-
-  push(ref(db, 'pacientes/'), {
-    nombreDelPaciente,
-    edadDelPaciente,
-    generoDelPaciente,
-    numeroTelPaciente,
-    lugarDeResidenciaDelPaciente,
-  })
-    .catch((error) => console.error("Error al guardar datos:", error));
-};
-
-export const registrarUsuario = async ({ nombreDelCuidador, edadDelCuidador, relacionConElPaciente, numeroTelCuidador, lugarDeResidenciaDelCuidador, correoElectronico, password }: Usuario) => {
+export const registrarUsuario = async ({ nombreDelCuidador, edadDelCuidador, relacionConElPaciente, numeroTelCuidador, lugarDeResidenciaDelCuidador, correoElectronico, password }: Usuario, { nombreDelPaciente, edadDelPaciente, generoDelPaciente, numeroTelPaciente, lugarDeResidenciaDelPaciente }: DatosDelPaciente) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, correoElectronico, password);
 
@@ -46,8 +32,16 @@ export const registrarUsuario = async ({ nombreDelCuidador, edadDelCuidador, rel
       relacionConElPaciente,
       numeroTelCuidador,
       lugarDeResidenciaDelCuidador,
-      userId,
     });
+
+    await set(ref(db, `usuarios/${userId}/paciente`), {
+      nombreDelPaciente,
+      edadDelPaciente,
+      generoDelPaciente,
+      numeroTelPaciente,
+      lugarDeResidenciaDelPaciente,
+    })
+
   } catch (error) {
     console.error("Error al registrar usuario:", error);
   }

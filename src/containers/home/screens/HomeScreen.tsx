@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { COLORS, button, primaryButton } from '@core'
+import React, { useEffect, useState } from 'react'
+import { COLORS, button, getMedicamentos, primaryButton } from '@core'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRoute } from '@react-navigation/native';
 
@@ -18,6 +18,44 @@ export const HomeScreen = () => {
     const { top, bottom } = useSafeAreaInsets()
     const route = useRoute();
     const { userId } = route.params || {};
+    const [datos, setDatos] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                const response = await getMedicamentos({ userId });
+
+                if (response) {
+                    // Convierte el objeto en un array de objetos
+                    const datosArray = Object.entries(response).map(([medicamento, info]) => ({
+                        medicamento,
+                        ...info
+                    }));
+
+                    setDatos(datosArray);
+                } else {
+                    setDatos([]);
+                }
+            } catch (error) {
+                console.error("Error obteniendo datos:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (userId) {
+            cargarDatos();
+        }
+    }, [userId]);
+
+    if (loading) {
+        return <Text>Cargando datos...</Text>;
+    }
+
+    if (!datos) {
+        return <Text>No se encontraron datos.</Text>;
+    }
 
     console.log("User ID home:", userId);
     return (
@@ -32,13 +70,16 @@ export const HomeScreen = () => {
             ]}
         >
             <FlatList
-                data={dummy_users}
+                data={datos}  // Ahora `datos` es un array
+                keyExtractor={(item, index) => index.toString()} // Evita warnings de React
                 renderItem={({ item }) => (
                     <View style={styles.infoContainer}>
                         <Text style={styles.texts}>Medicamento: {item.medicamento}</Text>
-                        <Text style={styles.texts}>Cada: {item.cada}</Text>
-                        {primaryButton({ text: 'Editar', oneTouch: () => { alert('Tomaste el medicamento') } })}
-                        {button({ text: 'Eliminar', oneTouch: () => { alert('No tomaste el medicamento') } })}
+                        <Text style={styles.texts}>Cada: {item.ciclo} horas</Text>
+                        <Text style={styles.texts}>Primera dosis: {item.primera}</Text>
+
+                        {primaryButton({ text: 'Editar', oneTouch: () => alert('Tomaste el medicamento') })}
+                        {button({ text: 'Eliminar', oneTouch: () => alert('No tomaste el medicamento') })}
                     </View>
                 )} />
         </View>

@@ -1,7 +1,7 @@
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { button, COLORS, inputText, primaryButton, registrarUsuario, registrarPaciente } from '@core'
+import { button, COLORS, inputText, primaryButton, registrarUsuario } from '@core'
 
 export const RegisterScreen = ({ navigation }:any) => {
   const { top, bottom } = useSafeAreaInsets()
@@ -59,8 +59,7 @@ export const RegisterScreen = ({ navigation }:any) => {
       return;
     }
     try {
-      await registrarUsuario(cuidador);
-      await registrarPaciente(paciente);
+      await registrarUsuario(cuidador, paciente );
       alert("Los datos se han guardado correctamente.");
     } catch (error) {
       alert("Error " + error);
