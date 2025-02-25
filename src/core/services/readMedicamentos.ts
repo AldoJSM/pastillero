@@ -14,8 +14,7 @@ export const getMedicamentos= async ({userId}:idDelUsuario)=>{
           console.log("Usuarios:", snapshot.val());
           return snapshot.val();
         } else {
-          console.log("No hay usuarios");
-          return Alert.alert("Errror", "No se encontro el usuario");
+          return Alert.alert("Error", "No se encontraron alarmas disponibles");
         }
       } catch (error) {
         console.error("Error obteniendo datos:", error);

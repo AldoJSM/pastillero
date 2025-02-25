@@ -1,18 +1,8 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { COLORS, button, getMedicamentos, primaryButton } from '@core'
+import { COLORS, button, eliminarMedicamento, getMedicamentos, primaryButton } from '@core'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRoute } from '@react-navigation/native';
-
-const dummy_users = [
-    { id: 1, medicamento: 'Paracetamol', cada: '12hrs' },
-    { id: 2, medicamento: 'Ibuprofeno', cada: '8hrs' },
-    { id: 3, medicamento: 'Amoxicilina', cada: '24hrs' },
-    { id: 4, medicamento: 'Omeprazol', cada: '12hrs' },
-    { id: 5, medicamento: 'Dexametasona', cada: '24hrs' },
-    { id: 6, medicamento: 'Clonazepam', cada: '12hrs' },
-    { id: 7, medicamento: 'Lorazepam', cada: '12hrs' },
-]
 
 export const HomeScreen = () => {
     const { top, bottom } = useSafeAreaInsets()
@@ -57,7 +47,6 @@ export const HomeScreen = () => {
         return <Text>No se encontraron datos.</Text>;
     }
 
-    console.log("User ID home:", userId);
     return (
         <View
             style={[
@@ -79,7 +68,7 @@ export const HomeScreen = () => {
                         <Text style={styles.texts}>Primera dosis: {item.primera}</Text>
 
                         {primaryButton({ text: 'Editar', oneTouch: () => alert('Tomaste el medicamento') })}
-                        {button({ text: 'Eliminar', oneTouch: () => alert('No tomaste el medicamento') })}
+                        {button({ text: 'Eliminar', oneTouch: async ()=> eliminarMedicamento(userId,item.medicamento) })}
                     </View>
                 )} />
         </View>
